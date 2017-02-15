@@ -1,6 +1,11 @@
 package org.usfirst.frc.team6600.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -16,7 +21,18 @@ public class Robot extends IterativeRobot {
 	final String customAuto = "My Auto";
 	String autoSelected;
 	SendableChooser<String> chooser = new SendableChooser<>();
-
+	
+	Victor leftMotors = new Victor(0);		
+	Victor rightMotors = new Victor(1);
+	
+	RobotDrive mainDrive = new RobotDrive(leftMotors, rightMotors);			
+	
+	Compressor compressor = new Compressor();		
+	
+	DoubleSolenoid pusher = new DoubleSolenoid(6, 7);		
+	
+	Joystick joy0 = new Joystick(0);			
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -68,6 +84,24 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		
+		while(isOperatorControl() && isEnabled()) {
+			
+			mainDrive.arcadeDrive(joy0.getRawAxis(1), joy0.getRawAxis(0));
+			
+			if(joy0.getRawButton(1)) {			
+				pusher.set(DoubleSolenoid.Value.kForward);
+			}
+			if(joy0.getRawButton(2)) {
+				pusher.set(DoubleSolenoid.Value.kReverse);
+			}
+			
+			
+		
+			
+			
+		}
+				
 	}
 
 	/**
